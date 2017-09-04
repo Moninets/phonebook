@@ -1,0 +1,114 @@
+
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone book</title>
+    <link rel="stylesheet" href="assets/css/app.css">
+  </head>
+  <body>
+
+    <head>
+        <script>
+            let man;
+            let journal = [];
+    
+            function People(surname, name, tnumb) {
+    
+                this.name = name;
+                this.surname = surname;
+                this.tnumb = tnumb;
+                this.showPeople = function (peshka) {
+                    peshka.innerHTML += "Имя: " + this.name + "</br>";
+                    peshka.innerHTML += "Фамилия: " + this.surname + "</br>";
+                    peshka.innerHTML += "Телефон: " + this.tnumb + "</br>";
+                }
+            }
+            let tmp = 0;
+            function Reg() {
+                let iN = document.querySelector("#inpName").value;
+                let iA = document.querySelector("#inpSurname").value;
+                let iTN = document.querySelector("#inpTNumb").value;
+                if (typeof (Storage) !== "undefined") {
+                    if (localStorage.clickcount) {
+                        localStorage.clickcount = Number(localStorage.clickcount) + 1;
+                        tmp = localStorage.clickcount;
+                    } else {
+                        localStorage.clickcount = 1;
+                    }
+                } else {
+                    document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+                }
+                man = new People(iA, iN, iTN);
+    
+                let serialObj = JSON.stringify(man); //сериализуем его
+                tmp = localStorage["clickcount"];
+                localStorage["myKey" + tmp] = serialObj;
+            }
+            function Show() {
+                document.getElementById("result").innerHTML = " ";
+                tmp = localStorage["clickcount"];
+                for (let  i = 1; i <= tmp; i++) {
+                let data = JSON.parse(localStorage["myKey" + i]);
+                    document.getElementById("result").innerHTML += "Имя: ";
+                    document.getElementById("result").innerHTML += data.name;
+                    document.getElementById("result").innerHTML += "<br>";
+    
+                    document.getElementById("result").innerHTML += "Фамилия: ";
+                    document.getElementById("result").innerHTML += data.surname;
+                    document.getElementById("result").innerHTML += "<br>";
+    
+                    document.getElementById("result").innerHTML += "Номер: ";
+                    document.getElementById("result").innerHTML += data.tnumb;
+                    document.getElementById("result").innerHTML += "<br>";
+                    document.getElementById("result").innerHTML += "<br>";
+                }
+            }
+            function Find() {
+                document.getElementById("result").innerHTML = " ";
+                let find = document.querySelector("#Serch").value;
+                tmp = localStorage["clickcount"];
+                for (let  i = 1; i <= tmp; i++) {
+                let data = JSON.parse(localStorage["myKey" + i]);
+                    if (data.name == find || data.tnumb == find) {
+                        document.getElementById("result").innerHTML += "Имя: ";
+                        document.getElementById("result").innerHTML += data.name;
+                        document.getElementById("result").innerHTML += "<br>";
+    
+                        document.getElementById("result").innerHTML += "Фамилия: ";
+                        document.getElementById("result").innerHTML += data.surname;
+                        document.getElementById("result").innerHTML += "<br>";
+    
+                        document.getElementById("result").innerHTML += "Номер: ";
+                        document.getElementById("result").innerHTML += data.tnumb;
+                        document.getElementById("result").innerHTML += "<br>";
+                        document.getElementById("result").innerHTML += "<br>";
+                    } else {
+                    }
+                }
+            }
+    
+        </script>
+    </head>
+    
+    <input id="inpName" placeholder="Имя"></input><br><br>
+    <input id="inpSurname" placeholder="Фамилия"></input><br><br>
+    <input id="inpTNumb" placeholder="Номер"></input><br><br>
+    
+    <button onclick="Reg()">Зарегистрировать номер</button>
+    <button onclick="Show()">Все номера</button>
+    <br>
+    <br>
+    <input id="Serch" placeholder="Имя, номер"></input>
+    <button onclick="Find()">Найти</button>
+    <br>
+    <br>
+    
+    <div id="result"></div>
+    
+
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
